@@ -11,66 +11,59 @@ struct Piloto{
 
 // Cadastro de Pilotos
 void cadastraPiloto(struct Piloto *pilotos, int *qtdPilotos){
-	int contQtdPilotos, validaRepetido, validaData, tempId[3];
-	char opcaoUsuario, tempIdChars[3], opcoesId[9];
+	struct Piloto *swapPiloto;
+	int validaRepetido, validaData;
+	char opcaoUsuario;
 	FILE *arqvPiloto;
-
-	contQtdPilotos = *qtdPilotos;
 	
 	//Criando ou abrindo o arquivo
-	if((arqvPiloto = fopen(ARQV_PILOTO, "r")) == NULL){
-		if((arqvPiloto = fopen(ARQV_PILOTO, "a+b")) == NULL){
-			printf("\n*** FALHA AO CRIAR ARQUIVO! ***\n\n");
-			return;
-		}
-	}else{
-		if((arqvPiloto = fopen(ARQV_PILOTO, "ab")) == NULL){
-			printf("\n*** FALHA AO ABRIR ARQUIVO! ***\n\n");
-			return;
-		}
-	}
+	abreArqvBinario(arqvPiloto);
+	//Alocacao de memoria
+	alocaStructPiloto(pilotos);
 	//Cadastrando pilotos
 	do{
-		//Alocando e realocando memória
-		if(contQtdPilotos == 0){
-			pilotos = (struct Piloto *) malloc(sizeof(struct Piloto));
-		}else{
-			pilotos = (struct Piloto *) realloc(pilotos, (contQtdPilotos+1) * sizeof(struct Piloto));
-		}
 		system("cls");
-		printf("Alocado %i bytes.\n\n", contQtdPilotos * sizeof(*pilotos));
+		printf("Qtd. Pilotos: %i | Alocado %i bytes\n\n", *qtdPilotos, sizeof(*pilotos));
 		//Cadastro do ID
 		do{
 			validaRepetido = 0;
-			gerarIdsRand(QTD_IDSRAND, MAX_IDSRAND, &pilotos[contQtdPilotos].id);
-			validaNumRepetido(pilotos, contQtdPilotos, &validaRepetido);
+			gerarIdsRand(QTD_IDSRAND, MAX_IDSRAND, &pilotos[(*qtdPilotos)-1].id);
+			validaNumRepetido(pilotos, *qtdPilotos, &validaRepetido);
 			if(validaRepetido == 1){
-				printf("\n*** O ID %i ja esta sendo utilizado! ***\n\n", pilotos[contQtdPilotos].id);
+				printf("\n*** O ID %i ja esta sendo utilizado! ***\n\n", pilotos[(*qtdPilotos)-1].id);
 			}
 		}while(validaRepetido == 1);
 		//Cadastro do Nome
-		leValidaString("Agora, insira o nome do piloto: ", MSG_ERRO, pilotos[contQtdPilotos].nome, 1);
+		leValidaString("Agora, insira o nome do piloto: ", MSG_ERRO, pilotos[(*qtdPilotos)-1].nome, 1);
 		//Cadastro da Data
-		/*do{
+		do{
 			validaData = 1;
-			leValidaData(pilotos[contQtdPilotos].dataNascimento, &validaData, 1);
-			printf("\ndataformatada: %s\n", pilotos[contQtdPilotos].dataNascimento.dataFormatada);
-			if(validaData == 1){
-				printf("\n*** Data invalida! ***\n\n");
-			}
-		}while(validaData == 1);*/
+			leValidaData("Informe a data de nascimento[DD/MM/AAAA]: ", "\n*** Data invalida! ***\n\n", pilotos[(*qtdPilotos-1)].dataNascimento, &validaData, 0);
+		}while(validaData == 1);
 		//Cadastro do Sexo
+		leValidaOpcao("Qual o sexo do piloto[M/F]? ", &pilotos[(*qtdPilotos)-1].sexo, "MF");
 		//Cadastro do País
-		//Gravação no arquivo
-		contQtdPilotos++;
+		//abreLeArqvPaises(pilotos[(*qtdPilotos)-1].paisOrigem);
 		leValidaOpcao("Deseja cadastrar mais um piloto[S/N]? ", &opcaoUsuario, "SN");
+		if(opcaoUsuario == 'S'){
+			//Incremento da quantidade de pilotos
+			(*qtdPilotos)++;
+			//Realocando e memória
+			if((swapPiloto = (struct Piloto *) realloc(pilotos, (*qtdPilotos) * sizeof(struct Piloto))) == NULL){
+				printf("\n*** FALHA AO ALOCAR MEMORIA! ***\n\n");
+				exit(1);			
+			}else{
+				pilotos = swapPiloto;
+				free(swapPiloto);
+			}
+		}
 	}while(opcaoUsuario == 'S');
+	//Gravação no arquivo
 	//Desalocando a memória
 	free(pilotos);
 	//Fechando o arquivo
 	fclose(arqvPiloto);
 	//Atualização da quantidade de pilotos
-	*qtdPilotos += contQtdPilotos;
 }
 
 // Alteração de Pilotos
@@ -100,6 +93,9 @@ void validaNumRepetido(struct Piloto *pilotos, int qtdMax, int *validaRepetido){
 	}
 }
 
+//Objetivo	:
+//Parâmetros:
+//Retorno	: ***
 void gerarIdsRand(int qtdIdsRand, int qtdMaxIds, int *idEscolhido){
 	int contQtdIds, contQtdChars, tempIds[qtdIdsRand], validaEscolha;
 	char opcaoUsuario[3], opcoesId[qtdIdsRand][qtdIdsRand];
@@ -127,4 +123,14 @@ void gerarIdsRand(int qtdIdsRand, int qtdMaxIds, int *idEscolhido){
 	}while(validaEscolha == 1);
 	
 	*idEscolhido = atoi(opcaoUsuario);
+}
+
+//Objetivo	: 
+//Parâmetros: 
+//Retorno	: ***
+void alocaStructPiloto(struct Piloto *pilotos){
+	if((pilotos = (struct Piloto *) malloc(sizeof(struct Piloto))) == NULL){
+		printf("\n*** FALHA AO ALOCAR MEMORIA! ***\n\n");
+		exit(1);
+	}
 }

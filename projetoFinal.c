@@ -16,6 +16,7 @@ Saída	:
 
 /* MACROS */
 #define ARQV_PILOTO "piloto.dat"
+#define ARQV_PAISES "paises.txt"
 #define MAX_MELHORESVOLTAS 10
 #define TAM_NOMEPAIS 30
 #define TAM_NOMECOMPLETO 30
@@ -36,7 +37,10 @@ Saída	:
 #include "melhoresVoltas.h"
 
 /* Protótipo das Funções & Procedimentos */
-void exibirMenuCRUD(char *nomeSujeito);
+void menuPilotoCRUD(struct Piloto *pilotos, char *opcaoUsuario, int *validaInteracao, int *qtdPilotos);
+void menuEquipeCRUD(struct Equipe *equipes, char *opcaoUsuario, int *validaInteracao, int *qtdEquipes);
+void menuCircuitoCRUD(struct Circuito *circuitos, char *opcaoUsuario, int *validaInteracao, int *qtdCircuitos);
+void menuMelhorVoltaCRUD(struct MelhorVolta *melhoresVoltas, char *opcaoUsuario, int *validaInteracao, int *qtdMelhoresVoltas);
 
 int main(){
 // Declarações
@@ -47,10 +51,10 @@ int main(){
 	int contQtdPilotos, contQtdEquipes, contQtdCircuitos, contQtdMelhoresVoltas, validaInteracao;
 	char opcaoUsuario;
 // Inicializações
-	contQtdPilotos = 0;
-	contQtdEquipes = 0;
-	contQtdCircuitos = 0;
-	contQtdMelhoresVoltas = 0;
+	contQtdPilotos = 1;
+	contQtdEquipes = 1;
+	contQtdCircuitos = 1;
+	contQtdMelhoresVoltas = 1;
 // Instruções
 	do{
 		validaInteracao = 1;
@@ -58,10 +62,10 @@ int main(){
 		system("cls");
 		printf("*** MOTOGP 2018 ***\n");
 		printf("-------------------\n\n");
-		printf("[C] - Realizar cadastramento, alteracao e exclusao de dados.\n");
-		printf("[R] - Consultar os dados cadastrados.\n");
-		printf("[S] - Exibir ultimo relatorio sintetico.\n");
-		printf("[X] - Encerrar do programa...\n\n");
+		printf("[C] Realizar gerenciamento de dados.\n");
+		printf("[R] Consultar os dados cadastrados.\n");
+		printf("[S] Exibir ultimo relatorio sintetico.\n");
+		printf("[X] Encerrar do programa...\n\n");
 		leValidaOpcao("Qual opcao deseja[C/R/S/X]? ", &opcaoUsuario ,"CRSX");
 		switch(opcaoUsuario){
 			case 'C':
@@ -71,88 +75,35 @@ int main(){
 					system("cls");
 					printf("*** GERENCIAMENTO MOTOGP 2018 ***\n");
 					printf("---------------------------------\n\n");
-					printf("[P] - Pilotos.\n");
-					printf("[E] - Equipes.\n");
-					printf("[C] - Circuitos.\n");
-					printf("[M] - Melhores Voltas.\n");
-					printf("[X] - Voltar ao menu anterior...\n\n");
+					printf("[P] Pilotos.\n");
+					printf("[E] Equipes.\n");
+					printf("[C] Circuitos.\n");
+					printf("[M] Melhores Voltas.\n");
+					printf("[X] Voltar ao menu anterior...\n\n");
 					leValidaOpcao("Qual opcao deseja[P/E/C/M/X]? ", &opcaoUsuario ,"PECMX");
 					switch(opcaoUsuario){
 						case 'P':
-							do{
-								validaInteracao = 1;
-								opcaoUsuario = '\0';
-								exibirMenuCRUD("Pilotos");
-								leValidaOpcao("Qual opcao deseja[C/A/E/X]? ", &opcaoUsuario, "CAEX");
-								switch(opcaoUsuario){
-									case 'C':
-										cadastraPiloto(pilotos, &contQtdPilotos);
-										break;
-									case 'A':
-										break;
-									case 'E':
-										break;
-									default:
-										validaInteracao = 0;
-								}
-							}while(validaInteracao == 1);
+							validaInteracao = 1;
+							opcaoUsuario = '\0';
+							menuPilotoCRUD(&pilotos, &opcaoUsuario, &validaInteracao, &contQtdPilotos);
 							validaInteracao = 1; // Gambiarra
 							break;
 						case 'E':
-							do{
-								validaInteracao = 1;
-								opcaoUsuario = '\0';
-								exibirMenuCRUD("Equipes");
-								leValidaOpcao("Qual opcao deseja[C/A/E/X]? ", &opcaoUsuario, "CAEX");
-								switch(opcaoUsuario){
-									case 'C':
-										break;
-									case 'A':
-										break;
-									case 'E':
-										break;
-									default:
-										validaInteracao = 0;
-								}
-							}while(validaInteracao == 1);
+							validaInteracao = 1;
+							opcaoUsuario = '\0';
+							menuEquipeCRUD(&equipes, &opcaoUsuario, &validaInteracao, &contQtdEquipes);
 							validaInteracao = 1; // Gambiarra
 							break;
 						case 'C':
-							do{
-								validaInteracao = 1;
-								opcaoUsuario = '\0';
-								exibirMenuCRUD("Circuitos");
-								leValidaOpcao("Qual opcao deseja[C/A/E/X]? ", &opcaoUsuario, "CAEX");
-								switch(opcaoUsuario){
-									case 'C':
-										break;
-									case 'A':
-										break;
-									case 'E':
-										break;
-									default:
-										validaInteracao = 0;
-								}
-							}while(validaInteracao == 1);
+							validaInteracao = 1;
+							opcaoUsuario = '\0';
+							menuCircuitoCRUD(&circuitos, &opcaoUsuario, &validaInteracao, &contQtdCircuitos);
 							validaInteracao = 1; // Gambiarra
 							break;
 						case 'M':
-							do{
-								validaInteracao = 1;
-								opcaoUsuario = '\0';
-								exibirMenuCRUD("Melhores Voltas");
-								leValidaOpcao("Qual opcao deseja[C/A/E/X]? ", &opcaoUsuario, "CAEX");
-								switch(opcaoUsuario){
-									case 'C':
-										break;
-									case 'A':
-										break;
-									case 'E':
-										break;
-									default:
-										validaInteracao = 0;
-								}
-							}while(validaInteracao == 1);
+							validaInteracao = 1;
+							opcaoUsuario = '\0';
+							menuMelhorVoltaCRUD(&melhoresVoltas ,&opcaoUsuario, &validaInteracao, &contQtdMelhoresVoltas);
 							validaInteracao = 1; // Gambiarra
 							break;
 						default:
@@ -168,16 +119,16 @@ int main(){
 					system("cls");
 					printf("*** RELATORIOS SINTETICOS MOTOGP 2018 ***\n");
 					printf("-----------------------------------------\n\n");
-					printf("[1] - Pesquisar um registro especifico em um dos arquivos pelo ID.\n");
-					printf("[2] - Pesquisar pilotos pelo nome.\n");
-					printf("[3] - Relacionar os pilotos que realizaram voltas em um circuito por data.\n");
-					printf("[4] - Pesquisar todos os circuitos cadastrados pelo nome.\n");
-					printf("[5] - Apresentar todos os pilotos de uma equipe por periodo.\n");
-					printf("[6] - Pesquisar todos os dados por tempo de volta igual ou menor fornecido.\n");
-					printf("[7] - Apresentar pilotos, equipes ou circuitos sem melhor volta realizada.\n");
-					printf("[8] - Pesquisar todos os dados dos circuitos pelo nome.\n");
-					printf("[9] - Pesquiar informacoes completas de um piloto.\n");
-					printf("[X] - Voltar ao menu anterior...\n\n");
+					printf("[1] Pesquisar um registro especifico em um dos arquivos pelo ID.\n");
+					printf("[2] Pesquisar pilotos pelo nome.\n");
+					printf("[3] Relacionar os pilotos que realizaram voltas em um circuito por data.\n");
+					printf("[4] Pesquisar todos os circuitos cadastrados pelo nome.\n");
+					printf("[5] Apresentar todos os pilotos de uma equipe por periodo.\n");
+					printf("[6] Pesquisar todos os dados por tempo de volta igual ou menor fornecido.\n");
+					printf("[7] Apresentar pilotos, equipes ou circuitos sem melhor volta realizada.\n");
+					printf("[8] Pesquisar todos os dados dos circuitos pelo nome.\n");
+					printf("[9] Pesquiar informacoes completas de um piloto.\n");
+					printf("[X] Voltar ao menu anterior...\n\n");
 					leValidaOpcao("Qual opcao deseja[1...9/X]? ", &opcaoUsuario ,"123456789X");
 					switch(opcaoUsuario){
 						case '1':
@@ -217,12 +168,110 @@ int main(){
 
 /* Funções & Procedimentos */
 
-void exibirMenuCRUD(char *nomeSujeito){
-	system("cls");
-	printf("*** CADASTRAMENTO DE %s ***\n", nomeSujeito);
-	printf("--------------------------------\n\n");
-	printf("[C] - Cadastramento de %s.\n", nomeSujeito);
-	printf("[A] - Alteracao de %s.\n", nomeSujeito);
-	printf("[E] - Exclusao de %s.\n", nomeSujeito);
-	printf("[X] - Voltar ao menu anterior...\n\n");
+//Objetivo	: Exibir o menu CRUD da classe piloto.
+//Parâmetros:
+//Retorno	: ***
+void menuPilotoCRUD(struct Piloto *pilotos, char *opcaoUsuario, int *validaInteracao, int *qtdPilotos){
+	do{
+		system("cls");
+		printf("*** GERENCIAMENTO DE PILOTOS ***\n");
+		printf("--------------------------------\n\n");
+		printf("[C] Cadastrar Piloto.\n");
+		printf("[A] Alterar Piloto.\n");
+		printf("[E] Excluir Pilotos.\n");
+		printf("[X] Voltar ao menu anterior...\n\n");
+		leValidaOpcao("Qual opcao deseja[C/A/E/X]? ", opcaoUsuario, "CAEX");
+		switch(*opcaoUsuario){
+			case 'C':
+				cadastraPiloto(pilotos, qtdPilotos);
+				break;
+			case 'A':
+				//alteraPiloto(pilotos, *qtdPilotos);
+				break;
+			case 'E':
+				//exlcuiPiloto(pilotos, *qtdPilotos);
+				break;
+			default:
+				*validaInteracao = 0;
+		}	
+	}while(*validaInteracao == 1);
+}
+
+//Objetivo	: Exibir o menu CRUD da classe equipe.
+//Parâmetros:
+//Retorno	: ***
+void menuEquipeCRUD(struct Equipe *equipes, char *opcaoUsuario, int *validaInteracao, int *qtdEquipes){
+	do{
+		system("cls");
+		printf("*** GERENCIAMENTO DE EQUIPES ***\n");
+		printf("--------------------------------\n\n");
+		printf("[C] Cadastrar Equipe.\n");
+		printf("[E] Excluir Equipe.\n");
+		printf("[X] Voltar ao menu anterior...\n\n");
+		leValidaOpcao("Qual opcao deseja[C/E/X]? ", opcaoUsuario, "CEX");
+		switch(*opcaoUsuario){
+			case 'C':
+				//cadastraEquipe(equipes, qtdEquipes);
+				break;
+			case 'E':
+				//exlcuiEquipe(equipes, qtdEquipes);
+				break;
+			default:
+				*validaInteracao = 0;
+		}
+	}while(*validaInteracao == 1);
+}
+
+//Objetivo	: Exibir o menu CRUD da classe circuito.
+//Parâmetros:
+//Retorno	: ***
+void menuCircuitoCRUD(struct Circuito *circuitos, char *opcaoUsuario, int *validaInteracao, int *qtdCircuitos){
+	do{
+		system("cls");
+		printf("*** GERENCIAMENTO DE CIRCUITOS ***\n");
+		printf("--------------------------------\n\n");
+		printf("[C] Cadastrar Circuito.\n");
+		printf("[A] Alterar Circuito.\n");
+		printf("[X] Voltar ao menu anterior...\n\n");
+		leValidaOpcao("Qual opcao deseja[C/A/X]? ", opcaoUsuario, "CAX");
+		switch(*opcaoUsuario){
+			case 'C':
+				//cadastraCircuito(circuitos, qtdCircuitos);
+				break;
+			case 'A':
+				//alteraCircuito(pilotos, qtdPilotos);
+				break;
+			default:
+				*validaInteracao = 0;
+		}	
+	}while(*validaInteracao == 1);
+}
+
+//Objetivo	: Exibir o menu CRUD da classe melhoresVoltas.
+//Parâmetros:
+//Retorno	: ***
+void menuMelhorVoltaCRUD(struct MelhorVolta *melhoresVoltas, char *opcaoUsuario, int *validaInteracao, int *qtdMelhoresVoltas){
+	do{
+		system("cls");
+		printf("*** GERENCIAMENTO DE MELHORES VOLTAS ***\n");
+		printf("--------------------------------\n\n");
+		printf("[C] Cadastrar Melhor Volta.\n");
+		printf("[A] Alterar Melhor Volta.\n");
+		printf("[E] Excluir Melhor Volta.\n");
+		printf("[X] Voltar ao menu anterior...\n\n");
+		leValidaOpcao("Qual opcao deseja[C/A/E/X]? ", opcaoUsuario, "CAEX");
+		switch(*opcaoUsuario){
+			case 'C':
+				//cadastraMelhorVolta(melhoresVoltas, qtdMelhoresVoltas);
+				break;
+			case 'A':
+				//alteraMelhorVolta(melhoresVoltas, qtdMelhoresVoltas);
+				break;
+			case 'E':
+				//exlcuiMelhorVolta(melhoresVoltas, qtdMelhoresVoltas);;
+				break;
+			default:
+				*validaInteracao = 0;
+		}	
+	}while(*validaInteracao == 1);
 }
