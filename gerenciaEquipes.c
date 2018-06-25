@@ -85,9 +85,7 @@ void cadastraEquipe(){
 		//Sigla
 		leValidaSigla("Agora, informe a sigla da equipe: ", MSG_ERRO, pEquipes[0].siglaEquipe);
 		//Pais de Origem
-		printf("\nsigla: %s | pais: %s\n", pEquipes[0].siglaEquipe, pEquipes[0].paisOrigem);
 		selecionaPais(pEquipes[0].paisOrigem);
-		printf("\nsigla: %s | pais: %s\n", pEquipes[0].siglaEquipe, pEquipes[0].paisOrigem);
 		//Gravar dados no arquivo
 		fseek(arqvEquipes, 0, SEEK_END);
 		fwrite(pEquipes, sizeof(tEquipe), 1, arqvEquipes);
@@ -156,7 +154,7 @@ void excluiEquipe(){
 		printf("| ID |      NOME     | SIGLA |      PAIS     |\n");
 		printf("+----+---------------+-------+---------------+\n");
 		for(contQtdEquipes = 0; contQtdEquipes < qtdEquipes; contQtdEquipes++){
-			printf("|%4i|%15s|%4s|%15s|\n",
+			printf("|%4i|%15s|%7s|%15s|\n",
 				pEquipes[contQtdEquipes].idEquipe,
 				pEquipes[contQtdEquipes].nomeEquipe,
 				pEquipes[contQtdEquipes].siglaEquipe,
@@ -188,7 +186,7 @@ void excluiEquipe(){
 //Objetivo	: Apresentar paises ao usuário e deixa-lo escolher um.
 //Parâmetros: Referência ao ponteiro do elemento pais da struct tEquipe.
 //Retorno	: ***
-void selecionaPais(char *pais){
+void selecionaPais(char *paisOrigem){
 	int contQtdPaises, qtdPaises, opcaoPais;
 	tPais *pPaises, tempStruct;
 	FILE *arqvPaises;
@@ -249,11 +247,10 @@ void selecionaPais(char *pais){
 	}
 	printf("+----+----+---------------+\n");
 	leValidaInt("\nSelecione um pais[1-10]: ", MSG_ERRO, &opcaoPais, 1, contQtdPaises+1);
-	memcpy(pais, (pPaises+(opcaoPais-1))->nomePais, strlen((pPaises+(opcaoPais-1))->nomePais));
+	memcpy(paisOrigem, (pPaises+(opcaoPais-1))->nomePais, sizeof((pPaises+(opcaoPais-1))->nomePais));
 	free(pPaises);
 	fclose(arqvPaises);
 }
-
 
 int comparaId(const void * a, const void * b){
 	if((*(tEquipe*)a).idEquipe == (*(tEquipe*)b).idEquipe){
