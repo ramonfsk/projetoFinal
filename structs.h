@@ -1,5 +1,5 @@
 typedef struct Pais{
-	char siglaPais[3], nomePais[15];
+	char siglaPais[4], nomePais[15];
 }tPais;
 
 typedef struct Data{
@@ -11,14 +11,13 @@ typedef struct Tempo{
 }tTempo;
 
 typedef struct Equipe{
-	int idEquipe;
-	char nomeEquipe[20], siglaEquipe[3], paisOrigem[15];
+	char nomeEquipe[20], siglaEquipe[4], paisOrigem[15];
 }tEquipe;
 
 typedef struct Piloto{
-	int id;
-	char nome[30], sigla[3], dataNascimento[10], paisOrigem[15];
-	char sexo;
+	int idPiloto;
+	char nomePiloto[30], siglaEquipe[3], dataNascimento[10], paisOrigem[15];
+	char sexoPiloto;
 }tPiloto;
 
 typedef struct Circuito{

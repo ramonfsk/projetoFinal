@@ -7,20 +7,39 @@ Objetivo:
 Entrada	: 
 Saída	: 
 */
-#define TAM_NOMECIRCUITO 20
-#define TAM_TEMPO 13
 
 /* Biliotecas */
 #include "validacoes.h"
+#include "structs.h"
 #include "gerenciaEquipes.h"
 #include "gerenciaPilotos.h"
 #include "gerenciaCircuitos.h"
 #include "gerenciaMelhoresVoltas.h"
 
+/* Protótipos das Funções & Procedimentos */
+void obterQtdEquipes(FILE *arqvEquipes, int *qtdEquipes);
+
 int main(){
-	int validaInteracao;
+//Declarações
+	FILE *arqvEquipes, *arqvPilotos, *arqvCircuitos, *arqvMelhoresVoltas;
+	int validaInteracao, qtdEquipes, qtdPilotos, qtdCircuitos, qtdMelhoresVoltas;
 	char opcaoUsuario;
-// Instruções
+//Inicializações
+	arqvEquipes = NULL;
+	arqvPilotos = NULL;
+	arqvCircuitos = NULL;
+	arqvMelhoresVoltas = NULL;
+	qtdEquipes = 0;
+	qtdPilotos = 0;
+	qtdCircuitos = 0;
+	qtdMelhoresVoltas = 0;
+//Instruções
+//Obter quatidade de informações nos arquivos
+obterQtdEquipes(arqvEquipes, &qtdEquipes);
+//obterQtdPilotos();
+//obterQtdCircuitos();
+//obterQtdMelhoresVoltas();
+//Apresentar menus
 	do{
 		validaInteracao = 1;
 		opcaoUsuario = '\0';
@@ -47,16 +66,21 @@ int main(){
 					printf("[X] Voltar ao menu anterior...\n\n");
 					leValidaOpcao("Qual opcao deseja[P/E/C/M/X]? ", &opcaoUsuario , "EPCMX");
 					switch(opcaoUsuario){
-						case 'P':
-							validaInteracao = 1;
-							opcaoUsuario = '\0';
-							//menuPilotoCRUD();
-							validaInteracao = 1; // Gambiarra
-							break;
 						case 'E':
 							validaInteracao = 1;
 							opcaoUsuario = '\0';
-							menuEquipeCRUD(&opcaoUsuario, &validaInteracao);
+							menuEquipeCRUD(arqvEquipes, &opcaoUsuario, &validaInteracao, &qtdEquipes);
+							validaInteracao = 1; // Gambiarra
+							break;
+						case 'P':
+							if(qtdEquipes == 0){
+								printf("\n*** Nao ha equipes cadastradas! \n\n***");
+								getch();
+							}else{
+								validaInteracao = 1;
+								opcaoUsuario = '\0';
+								menuPilotoCRUD(&opcaoUsuario, &validaInteracao, &qtdPilotos);	
+							}
 							validaInteracao = 1; // Gambiarra
 							break;
 						case 'C':
@@ -127,6 +151,32 @@ int main(){
 				validaInteracao = 0;
 		}
 		}while(validaInteracao == 1);
-	
 	return 0;
+}
+
+void obterQtdEquipes(FILE *arqvEquipes, int *qtdEquipes){
+	tEquipe tempStruct;
+	
+	//Criar ou abrir arquivo existente
+	if((arqvEquipes = fopen(ARQV_EQUIPES, "r")) == NULL){
+		if((arqvEquipes = fopen(ARQV_EQUIPES, "wb+")) == NULL){
+			printf("\n*** FALHA AO CRIAR O ARQUIVO! ***\n\n");
+			fclose(arqvEquipes);
+			getch();
+			return;
+		}
+	}else{
+		if((arqvEquipes = fopen(ARQV_EQUIPES, "rb+")) == NULL){
+			printf("\n*** FALHA AO ABRIR O ARQUIVO! ***\n\n");
+			fclose(arqvEquipes);
+			getch();
+			return;
+		}
+	}
+	//Obter a quantidade de equipes já cadastradas no arquivo
+	*qtdEquipes = 0;
+	fseek(arqvEquipes, 0, SEEK_SET);
+	while(fread(&tempStruct, sizeof(tEquipe), 1, arqvEquipes) == 1){
+		(*qtdEquipes)++;
+	}
 }
