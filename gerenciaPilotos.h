@@ -12,3 +12,6 @@ void cadastraPiloto();
 /* Funções e Procedimentos da Classe Pilotos */
 void selecionaIdRand();
 void validaIdRepetido();
+void validaNomePilotoRepetido();
+void selecionaPais();
+void selecionaSigla();

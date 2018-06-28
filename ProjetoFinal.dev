@@ -91,7 +91,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit9]
-FileName=gerenciaMelhorVolta.h
+FileName=gerenciaCircuitos.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -101,7 +101,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit10]
-FileName=gerenciaCircuitos.c
+FileName=gerenciaCircuitos.h
 CompileCpp=0
 Folder=
 Compile=1
@@ -151,7 +151,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit11]
-FileName=gerenciaMelhorVolta.c
+FileName=gerenciaMelhoresVoltas.c
 CompileCpp=0
 Folder=
 Compile=1
@@ -161,7 +161,7 @@ OverrideBuildCmd=0
 BuildCmd=
 
 [Unit12]
-FileName=gerenciaCircuitos.h
+FileName=gerenciaMelhoresVoltas.h
 CompileCpp=0
 Folder=
 Compile=1

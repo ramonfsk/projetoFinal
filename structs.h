@@ -21,9 +21,9 @@ typedef struct Piloto{
 }tPiloto;
 
 typedef struct Circuito{
-	int id, idPiloto;
-	char nome[15], pais[15], tempoRecorde[13];
-	float tamanho;
+	int idCircuito, idPiloto;
+	char nomeCircuito[15], paisCircuito[15], tempoRecorde[13];
+	float tamanhoCircuito;
 }tCircuito;
 
 typedef struct MelhorVolta{

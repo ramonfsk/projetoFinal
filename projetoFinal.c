@@ -18,6 +18,9 @@ Saída	:
 
 /* Protótipos das Funções & Procedimentos */
 void obterQtdEquipes(FILE *arqvEquipes, int *qtdEquipes);
+void obterQtdPilotos(FILE *arqvPilotos, int *qtdPilotos);
+void obterQtdCircuitos(FILE *arqvCircuitos, int *qtdCircuitos);
+void obterQtdMelhoresVoltas(FILE *arqvMelhoresVoltas, int *qtdMelhoresVoltas);
 
 int main(){
 //Declarações
@@ -34,11 +37,11 @@ int main(){
 	qtdCircuitos = 0;
 	qtdMelhoresVoltas = 0;
 //Instruções
-//Obter quatidade de informações nos arquivos
-obterQtdEquipes(arqvEquipes, &qtdEquipes);
-//obterQtdPilotos();
-//obterQtdCircuitos();
-//obterQtdMelhoresVoltas();
+	//Obter quatidade de informações nos arquivos
+	obterQtdEquipes(arqvEquipes, &qtdEquipes);
+	obterQtdPilotos(arqvPilotos, &qtdPilotos);
+	obterQtdCircuitos(arqvCircuitos, &qtdCircuitos);
+	obterQtdMelhoresVoltas(arqvMelhoresVoltas, &qtdMelhoresVoltas);
 //Apresentar menus
 	do{
 		validaInteracao = 1;
@@ -69,7 +72,7 @@ obterQtdEquipes(arqvEquipes, &qtdEquipes);
 						case 'E':
 							validaInteracao = 1;
 							opcaoUsuario = '\0';
-							menuEquipeCRUD(arqvEquipes, &opcaoUsuario, &validaInteracao, &qtdEquipes);
+							menuEquipeCRUD(&opcaoUsuario, &validaInteracao, &qtdEquipes);
 							validaInteracao = 1; // Gambiarra
 							break;
 						case 'P':
@@ -84,15 +87,25 @@ obterQtdEquipes(arqvEquipes, &qtdEquipes);
 							validaInteracao = 1; // Gambiarra
 							break;
 						case 'C':
-							validaInteracao = 1;
-							opcaoUsuario = '\0';
-							//menuCircuitoCRUD();
+							if(qtdPilotos == 0){
+								printf("\n*** Nao ha pilotos cadastrados! \n\n***");
+								getch();								
+							}else{
+								validaInteracao = 1;
+								opcaoUsuario = '\0';
+								//menuCircuitoCRUD();								
+							}
 							validaInteracao = 1; // Gambiarra
 							break;
 						case 'M':
-							validaInteracao = 1;
-							opcaoUsuario = '\0';
-							//menuMelhorVoltaCRUD();
+							if(qtdCircuitos){
+								printf("\n*** Nao ha circuitos cadastrados! \n\n***");
+								getch();		
+							}else{
+								validaInteracao = 1;
+								opcaoUsuario = '\0';
+								//menuMelhorVoltaCRUD();								
+							}
 							validaInteracao = 1; // Gambiarra
 							break;
 						default:
@@ -156,7 +169,6 @@ obterQtdEquipes(arqvEquipes, &qtdEquipes);
 
 void obterQtdEquipes(FILE *arqvEquipes, int *qtdEquipes){
 	tEquipe tempStruct;
-	
 	//Criar ou abrir arquivo existente
 	if((arqvEquipes = fopen(ARQV_EQUIPES, "r")) == NULL){
 		if((arqvEquipes = fopen(ARQV_EQUIPES, "wb+")) == NULL){
@@ -179,4 +191,86 @@ void obterQtdEquipes(FILE *arqvEquipes, int *qtdEquipes){
 	while(fread(&tempStruct, sizeof(tEquipe), 1, arqvEquipes) == 1){
 		(*qtdEquipes)++;
 	}
+	fclose(arqvEquipes);
+}
+
+void obterQtdPilotos(FILE *arqvPilotos, int *qtdPilotos){
+	tPiloto tempStruct;
+	//Criar ou abrir arquivo existente
+	if((arqvPilotos = fopen(ARQV_PILOTOS, "r")) == NULL){
+		if((arqvPilotos = fopen(ARQV_PILOTOS, "wb+")) == NULL){
+			printf("\n*** FALHA AO CRIAR O ARQUIVO! ***\n\n");
+			fclose(arqvPilotos);
+			getch();
+			return;
+		}
+	}else{
+		if((arqvPilotos = fopen(ARQV_PILOTOS, "rb+")) == NULL){
+			printf("\n*** FALHA AO ABRIR O ARQUIVO! ***\n\n");
+			fclose(arqvPilotos);
+			getch();
+			return;
+		}
+	}
+	//Obter a quantidade de equipes já cadastradas no arquivo
+	*qtdPilotos = 0;
+	fseek(arqvPilotos, 0, SEEK_SET);
+	while(fread(&tempStruct, sizeof(tPiloto), 1, arqvPilotos) == 1){
+		(*qtdPilotos)++;
+	}
+	fclose(arqvPilotos);
+}
+
+void obterQtdCircuitos(FILE *arqvCircuitos, int *qtdCircuitos){
+	tCircuito tempStruct;
+	//Criar ou abrir arquivo existente
+	if((arqvCircuitos = fopen(ARQV_CIRCUITOS, "r")) == NULL){
+		if((arqvCircuitos = fopen(ARQV_CIRCUITOS, "wb+")) == NULL){
+			printf("\n*** FALHA AO CRIAR O ARQUIVO! ***\n\n");
+			fclose(arqvCircuitos);
+			getch();
+			return;
+		}
+	}else{
+		if((arqvCircuitos = fopen(ARQV_CIRCUITOS, "rb+")) == NULL){
+			printf("\n*** FALHA AO ABRIR O ARQUIVO! ***\n\n");
+			fclose(arqvCircuitos);
+			getch();
+			return;
+		}
+	}
+	//Obter a quantidade de equipes já cadastradas no arquivo
+	*qtdCircuitos = 0;
+	fseek(arqvCircuitos, 0, SEEK_SET);
+	while(fread(&tempStruct, sizeof(tCircuito), 1, arqvCircuitos) == 1){
+		(*qtdCircuitos)++;
+	}
+	fclose(arqvCircuitos);
+}
+
+void obterQtdMelhoresVoltas(FILE *arqvMelhoresVoltas, int *qtdMelhoresVoltas){
+	tMelhorVolta tempStruct;
+	//Criar ou abrir arquivo existente
+	if((arqvMelhoresVoltas = fopen(ARQV_MELHORESVOLTAS, "r")) == NULL){
+		if((arqvMelhoresVoltas = fopen(ARQV_MELHORESVOLTAS, "wb+")) == NULL){
+			printf("\n*** FALHA AO CRIAR O ARQUIVO! ***\n\n");
+			fclose(arqvMelhoresVoltas);
+			getch();
+			return;
+		}
+	}else{
+		if((arqvMelhoresVoltas = fopen(ARQV_MELHORESVOLTAS, "rb+")) == NULL){
+			printf("\n*** FALHA AO ABRIR O ARQUIVO! ***\n\n");
+			fclose(arqvMelhoresVoltas);
+			getch();
+			return;
+		}
+	}
+	//Obter a quantidade de equipes já cadastradas no arquivo
+	*qtdMelhoresVoltas = 0;
+	fseek(arqvMelhoresVoltas, 0, SEEK_SET);
+	while(fread(&tempStruct, sizeof(tMelhorVolta), 1, arqvMelhoresVoltas) == 1){
+		(*qtdMelhoresVoltas)++;
+	}
+	fclose(arqvMelhoresVoltas);
 }

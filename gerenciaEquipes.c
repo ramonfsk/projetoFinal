@@ -2,16 +2,34 @@
 #include "gerenciaEquipes.h"
 #include "structs.h"
 #include "validacoes.h"
-#include "funcoes.h"
 /* Métodos */
 
 //Objetivo	: Exibir o menu CRUD da classe equipe.
 //Parâmetros:
 //Retorno	: ***
-void menuEquipeCRUD(FILE *arqvEquipes, char *opcaoUsuario, int *validaInteracao, int *qtdEquipes){
+void menuEquipeCRUD(char *opcaoUsuario, int *validaInteracao, int *qtdEquipes){
+	FILE *arqvEquipes;
 	tEquipe tempStruct;
+	arqvEquipes = NULL;
+	
 	do{
-		
+		//Criar ou abrir arquivo existente
+		if((arqvEquipes = fopen(ARQV_EQUIPES, "r")) == NULL){
+			if((arqvEquipes = fopen(ARQV_EQUIPES, "wb+")) == NULL){
+				printf("\n*** FALHA AO CRIAR O ARQUIVO! ***\n\n");
+				fclose(arqvEquipes);
+				getch();
+				return;
+			}
+		}else{
+			if((arqvEquipes = fopen(ARQV_EQUIPES, "rb+")) == NULL){
+				printf("\n*** FALHA AO ABRIR O ARQUIVO! ***\n\n");
+				fclose(arqvEquipes);
+				getch();
+				return;
+			}
+		}
+		//Obtem quantidade de equipes cadastradas
 		*qtdEquipes = 0;
 		fseek(arqvEquipes, 0, SEEK_SET);
 		while(fread(&tempStruct, sizeof(tEquipe), 1, arqvEquipes) == 1){
